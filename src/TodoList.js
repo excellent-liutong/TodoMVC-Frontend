@@ -54,25 +54,26 @@ class TodoList extends Component {
 
 
             <div style={{
-                width: '500px', margin: '0 auto',
+                width: '300px', margin: '0 auto',
             }}>
 
                 {/* 下面是todoList */}
                 <label htmlFor='insertArea' style={{ width: '300px', fontSize: '50px', margin: '0 auto', }} >今日待办</label>
                 <br></br>
-                <div>
+                <div style={{ overflow: "hidden" }}>
                     <Input
                         id='insertArea'
                         placeholder="请输入待办事项"
-                        style={{ width: '300px', marginRight: '20px', float: 'left' }}
+                        style={{ width: '200px', marginRight: '20px', float: 'left' }}
                         value={this.state.inputValue}
                         onChange={this.handleInputChange}
                     />
                     <Button
+                        // style={{ width: '50px',  }}
                         type="primary"
                         shape="round"
                         onClick={this.handleBtnClick}
-                    // style={{ width: '10px', marginRight: '20px' ,float:'right'}}
+                    
                     >提交                </Button>
                 </div>
 
