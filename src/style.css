@@ -1,0 +1,10 @@
+
+.todo{
+    opacity: 100%;
+    transition: all 0.5s ease-in;
+}
+.achieve{
+    text-decoration:line-through;
+    opacity: 30%;
+    transition: all 0.5s ease-in;
+}
