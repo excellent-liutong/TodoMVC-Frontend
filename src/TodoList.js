@@ -45,10 +45,10 @@ class TodoList extends Component {
         return (<Fragment>
             <div style={{ overflow: "hidden" }} >
                 <Button type="primary" style={{ float: "right" }}>
-                    <a href="/login">登录</a>
+                    <a href="">登录</a>
                 </Button>
                 <Button type="primary" style={{ float: "right" }}>
-                    <a href="/register" >注册</a>
+                    <a href="" >注册</a>
                 </Button>
             </div>
 

@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import 'antd/dist/antd.css';
 import {  Button, } from 'antd';
-
 import './style.css'
+
+
 class TodoItem extends Component {
     constructor(props) {
         super(props)
@@ -18,10 +19,13 @@ class TodoItem extends Component {
             <Fragment>
                 
                 <li className={this.state.show ? 'todo' : 'achieve'}
+                
                 >{content}
                 </li>
+
                 <Button onClick={this.handleItemCompleted}>完成</Button>
                 <Button onClick={this.handleItemDelete}>删除</Button>
+                                <br/>
                                 <br/>
 
                 
@@ -33,8 +37,12 @@ class TodoItem extends Component {
             show: this.state.show ? false : true
         })
     }
+
     handleItemDelete(){
         this.props.deleteItem(this.props.index)
+        this.setState({
+            show:  true
+        })
     }
 }
 
