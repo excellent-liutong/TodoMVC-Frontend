@@ -2,14 +2,40 @@ import React, { Component, Fragment } from 'react';
 import './style.css'
 import TodoItem from './TodoItem'
 
+
+import axios from 'axios'
 import 'antd/dist/antd.css';
 import { Input, Button, } from 'antd';
 
 
 
 
+import { createStore } from 'redux'
 
-import './style.css'
+// import { connect } from 'react-redux';
+const initialState = {
+    count: 0
+}
+
+function reducer (state = initialState, action) {
+    console.log('reducer', state, action);
+    return state;
+}
+
+// const store = createStore(reducer)
+// store.dispatch({ type: "INCREMENT" });
+// store.dispatch({ type: "INCREMENT" });
+// store.dispatch({ type: "DECREMENT" });
+// store.dispatch({ type: "RESET" });
+
+// function mapStateToProps (state) {
+//     return {
+//         count: state.count
+//     };
+// }
+
+
+
 
 const storage = window.localStorage;
 
@@ -24,8 +50,6 @@ class TodoList extends Component {
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleBtnClick = this.handleBtnClick.bind(this)
         this.handleItemDelete = this.handleItemDelete.bind(this)
-
-
     };
 
     componentDidMount () {
@@ -36,6 +60,7 @@ class TodoList extends Component {
                 // list: todoList
             })
         }
+
     }
     componentDidUpdate () {
         storage.setItem('todoList', JSON.stringify(this.state.list))
@@ -43,14 +68,7 @@ class TodoList extends Component {
 
     render () {
         return (<Fragment>
-            <div style={{ overflow: "hidden" }} >
-                <Button type="primary" style={{ float: "right" }}>
-                    <a href="">登录</a>
-                </Button>
-                <Button type="primary" style={{ float: "right" }}>
-                    <a href="" >注册</a>
-                </Button>
-            </div>
+
 
 
             <div style={{
@@ -73,7 +91,7 @@ class TodoList extends Component {
                         type="primary"
                         shape="round"
                         onClick={this.handleBtnClick}
-                    
+
                     >提交                </Button>
                 </div>
 
@@ -111,8 +129,41 @@ class TodoList extends Component {
 
     handleBtnClick () {
         this.setState((prevState) => {
+
+            const storage = window.localStorage;
+            let token=storage.getItem('token')
+            const headers = {
+                'authorization': 'Bearer ' + token
+            }
+            console.log(headers)
+            axios.post('http://localhost:3001/user/vertify', {}, { headers: headers }).then((res) => {
+                    console.log(res.data)
+                }).catch(() => { console.log('error') })
+
             // 判断输出是否为空
             if (prevState.inputValue.length > 0) {
+                let todoInfo = {
+                    Name: 'light',
+                    Thing: prevState.inputValue,
+                    achieved: false
+                }
+
+                axios.post('http://localhost:3001/login', {}).then((res) => {
+                    console.log('token',res.data.token)
+                    console.log(typeof res.data)
+                    storage.setItem("token",res.data.token)
+        
+                }).catch(() => { console.log('error') })
+                        
+                
+
+
+                axios.post('http://localhost:3001/todo/test', todoInfo,{headers: headers}).then((res) => {
+                    console.log(res.data)
+                }).catch(() => { console.log('error') })
+
+
+
                 return ({
                     list: [...prevState.list, prevState.inputValue],
                     inputValue: ''
@@ -124,8 +175,29 @@ class TodoList extends Component {
 
     handleItemDelete (index) {
         this.setState((prevState) => {
+            const storage = window.localStorage;
+            axios.post('http://localhost:3001/login',).then((res) => {
+                storage.setItem("token", res.data.token)
+            }).catch(() => { console.log('error') })
+            let token=storage.getItem('token')
+            const headers = {
+                'authorization': 'Bearer ' + token
+            }
+
             let list = [...prevState.list]
+            console.log(list[index])
+            let deleteTodo = {
+                Name: 'light',
+                Thing: list[index],
+                achieved: false
+            }
+            
+
+            axios.post('http://localhost:3001/todo/deleteTodo', deleteTodo,{ headers: headers }).then((res) => {
+                    console.log(res.data)
+                }).catch(() => { console.log('error') })
             list.splice(index, 1)
+            
             return { list }
         })
     }
@@ -133,3 +205,5 @@ class TodoList extends Component {
 }
 
 export default TodoList;
+
+// export default connect(mapStateToProps)(TodoList);
