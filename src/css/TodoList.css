@@ -1,0 +1,94 @@
+.app{
+  background-color:#0092c7;
+  padding:  15px 0;
+  min-height: 500px;
+  width: 360px;
+  margin:  auto;
+  margin-top: 40px;
+  border-radius: 10px;
+}
+
+.todoListMain header input{
+  padding:0 10px;
+  margin: 15px;
+  font-size: 18px;
+  border:1px solid #fff;
+  border-radius: 10px;
+  width: 200px;
+  height: 50px;
+}
+
+.todoListMain header input:focus{
+  outline: none;
+}
+
+.todoListMain header button{
+  padding:10px;
+  font-size: 16px;
+  margin: 10px 5px;
+  margin-right: 0px;
+  background-color: #ff8c78;
+  color: #000;
+  border:0px ;
+  border-radius: 10px;
+  height: 50px;
+  width:90px;
+  flex-grow: 2;
+  font-weight: bolder;
+}
+
+.todoListMain header button:hover{
+  background-color: #f57773;
+  border:0px;
+  cursor: pointer;
+}
+.todoListMain header button:focus{
+  outline: none;
+}
+
+.todoListMain .theList li{
+  background-color:#f3e59a;
+  color: #000;
+  padding: 15px;
+  margin: 15px;
+  border-radius:5px ;
+  list-style: none;
+  transition: background-color .2s ease-out;
+  position: relative;
+}
+
+.todoListMain .theList li span{
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+
+.todoListMain .theList li input{
+  background-color: transparent;
+  border: 0;
+  font-size: 18px;
+  width: 200px;
+}
+
+.todoListMain .theList li input:focus{
+  outline: none;
+}
+
+.faicons{
+  margin: 0 5px;
+  font-size: 15px;
+}
+.faicons:hover{
+  color:#0067a6;
+}
+
+.todoListMain .theList li:hover{
+  background-color:#f29c9c;
+  color: #000;
+}
+
+ul.theList{
+  padding: 0;
+}
+
+ 

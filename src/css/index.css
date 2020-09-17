@@ -1,0 +1,10 @@
+body{
+  padding: 0 20px;
+  background-color: #9fe0f6;
+  font-family: sans-serif;
+}
+
+#container{
+  display: flex;
+  justify-content: center;
+}
