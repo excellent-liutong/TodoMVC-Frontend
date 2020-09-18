@@ -5,6 +5,7 @@ import "../css//TodoList.css";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { faTrash, faCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
 
 library.add(far, faTrash, faCircle, faCheckCircle)
 
@@ -33,6 +34,24 @@ class Todo extends Component {
         completed: false,
         display: 'block'
       };
+      const storage = window.localStorage;
+      let todoInfo = {
+        name: storage.getItem("name"),
+        thing: newItem.text,
+        completed: newItem.completed
+      };
+      let token = storage.getItem('token')
+      const headers = {
+        'authorization': 'Bearer ' + token
+      }
+
+
+
+      axios.post('http://localhost:3001/todo/test', todoInfo, { headers: headers }).then((res) => {
+        console.log(res.data)
+      }).catch(() => { console.log('error') })
+
+
 
       this.setState((prevState) => {
         return {
@@ -40,7 +59,11 @@ class Todo extends Component {
         };
       });
     }
+
+
+
     this._inputElement.value = "";
+
 
     e.preventDefault();
   }
@@ -121,7 +144,7 @@ class Todo extends Component {
     })
   }
 
-  deleteCompletedItems(){
+  deleteCompletedItems () {
     let filteredItems = this.state.items.filter((item) => {
       return item.completed === false
     })
@@ -134,30 +157,30 @@ class Todo extends Component {
     return (
       <Fragment>
         <div className="todoListMain">
-            <header>
-              <form id="to-do-form" onSubmit={this.addItem} >
-                <input
-                  ref={(a) => { this._inputElement = a }}
-                  placeholder="请输入待办事项">
-                </input>
-                <button type="submit">添加</button>
-              </form>
-            </header>
+          <header>
+            <form id="to-do-form" onSubmit={this.addItem} >
+              <input
+                ref={(a) => { this._inputElement = a }}
+                placeholder="请输入待办事项">
+              </input>
+              <button type="submit">添加</button>
+            </form>
+          </header>
 
-            <TodoItems
-              entries={this.state.items}
-              delete={this.deleteItem}
-              achieve={this.achieveItem}
-              setUpdate={this.setUpdate}
-            ></TodoItems>
-            <Seletor
-              entries={this.state.items}
-              allItems={this.showAllItems}
-              activeItems={this.showActiveItems}
-              completedItems={this.showCompletedItems}
-              deleteCompletedItems={this.deleteCompletedItems}
-            ></Seletor>
-          </div>
+          <TodoItems
+            entries={this.state.items}
+            delete={this.deleteItem}
+            achieve={this.achieveItem}
+            setUpdate={this.setUpdate}
+          ></TodoItems>
+          <Seletor
+            entries={this.state.items}
+            allItems={this.showAllItems}
+            activeItems={this.showActiveItems}
+            completedItems={this.showCompletedItems}
+            deleteCompletedItems={this.deleteCompletedItems}
+          ></Seletor>
+        </div>
       </Fragment>
 
     );
