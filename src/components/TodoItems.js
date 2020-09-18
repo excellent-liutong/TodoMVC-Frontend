@@ -20,7 +20,7 @@ class TodoItems extends Component {
 
   createTasks (item) {
     return (
-      <div key={item.key}>
+      <div key={item.key} style={{display: item.display}}>
         <div className='circle'>
           <FontAwesomeIcon
             className='faicons'

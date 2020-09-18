@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import TodoItems from "./TodoItems";
+import Seletor from './Seletor'
 import "../css//TodoList.css";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { faTrash,faCircle,faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 
-library.add(far,faTrash,faCircle,faCheckCircle)
+library.add(far, faTrash, faCircle, faCheckCircle)
 
 class Todo extends Component {
   constructor(props) {
@@ -18,6 +19,10 @@ class Todo extends Component {
     this.deleteItem = this.deleteItem.bind(this)
     this.achieveItem = this.achieveItem.bind(this)
     this.setUpdate = this.setUpdate.bind(this)
+    this.showAllItems = this.showAllItems.bind(this)
+    this.showActiveItems = this.showActiveItems.bind(this)
+    this.showCompletedItems = this.showCompletedItems.bind(this)
+    this.deleteCompletedItems = this.deleteCompletedItems.bind(this)
   }
 
   addItem (e) {
@@ -25,7 +30,8 @@ class Todo extends Component {
       let newItem = {
         text: this._inputElement.value,
         key: Date.now(),
-        completed: false
+        completed: false,
+        display: 'block'
       };
 
       this.setState((prevState) => {
@@ -52,7 +58,7 @@ class Todo extends Component {
     })
   }
 
-  
+
   deleteItem (key) {
     let filteredItems = this.state.items.filter((item) => {
       return item.key !== key
@@ -75,11 +81,59 @@ class Todo extends Component {
     })
   }
 
+  showAllItems () {
+    const items = this.state.items;
+    items.map((item) => {
+      return item.display = 'block'
+    })
+    this.setState({
+      items: items
+    })
+  }
+
+  showActiveItems () {
+    const items = this.state.items;
+    items.map((item) => {
+      if (item.completed === false) {
+        return item.display = 'block'
+      }
+      else {
+        return item.display = 'none'
+      }
+    })
+    this.setState({
+      items: items
+    })
+  }
+
+  showCompletedItems () {
+    const items = this.state.items;
+    items.map((item) => {
+      if (item.completed === true) {
+        return item.display = 'block'
+      }
+      else {
+        return item.display = 'none'
+      }
+    })
+    this.setState({
+      items: items
+    })
+  }
+
+  deleteCompletedItems(){
+    let filteredItems = this.state.items.filter((item) => {
+      return item.completed === false
+    })
+    this.setState({
+      items: filteredItems
+    })
+  }
+
   render () {
     return (
       <Fragment>
         <div className="todoListMain">
-          <div className="app">
             <header>
               <form id="to-do-form" onSubmit={this.addItem} >
                 <input
@@ -96,8 +150,14 @@ class Todo extends Component {
               achieve={this.achieveItem}
               setUpdate={this.setUpdate}
             ></TodoItems>
+            <Seletor
+              entries={this.state.items}
+              allItems={this.showAllItems}
+              activeItems={this.showActiveItems}
+              completedItems={this.showCompletedItems}
+              deleteCompletedItems={this.deleteCompletedItems}
+            ></Seletor>
           </div>
-        </div>
       </Fragment>
 
     );

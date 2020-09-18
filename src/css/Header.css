@@ -1,7 +1,42 @@
-#title{
+#Header-container{
   display: flex;
   justify-content: center;
+  align-items: center; 
+}
+
+#Header-container h1{
   font-size: 80px;
-  align-items: center;
   font-weight:lighter;
+  margin:0 auto;
+}
+
+#Header-buttons{
+  position: relative;
+}
+
+.button{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: #04afda;
+  margin-right: 25px;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight:normal;
+  text-decoration:none;
+  color:black
+}
+
+.button:focus{
+  outline:none;
+  text-decoration: none; 
+  outline-offset:0;
+}
+
+.button:hover{
+  background-color:#f29c9c;
+  color: #000;
 }

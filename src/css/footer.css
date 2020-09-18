@@ -1,9 +1,6 @@
 #slogan{
   display: flex;
-  justify-content: center;
+  justify-content:  center;
   margin: 15px;
   align-items: center;
-}
-footer{
-  display: table;
 }

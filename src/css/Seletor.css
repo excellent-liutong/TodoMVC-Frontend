@@ -1,0 +1,28 @@
+#seletor-container{
+  display: flex;
+  justify-content: space-around;
+  margin: 15px;
+  align-items: center;
+}
+#seletor-container button{
+  padding:5px;
+  font-size: 15px;
+  margin: 10px 6px;
+  background-color: #f3e4c2;
+  /* background-color: #ef4926; */
+  color: #000;
+  border:0px ;
+  border-radius: 10px;
+  height: 40px;
+  width:40px;
+  flex-grow: 1;
+}
+
+#seletor-container button:hover{
+  background-color: #f57773;
+  border:0px;
+  cursor: pointer;
+}
+#seletor-container button:focus{
+  outline: none;
+}

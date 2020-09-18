@@ -1,12 +1,3 @@
-.app{
-  background-color:#0092c7;
-  padding:  15px 0;
-  min-height: 500px;
-  width: 360px;
-  margin:  auto;
-  border-radius: 10px;
-}
-
 .todoListMain header input{
   padding:0 10px;
   margin: 15px;
