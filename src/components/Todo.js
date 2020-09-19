@@ -5,7 +5,9 @@ import "../css//TodoList.css";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { faTrash, faCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios'
+
+
+import { updateToBackEnd } from './utils/axios'
 
 library.add(far, faTrash, faCircle, faCheckCircle)
 
@@ -18,13 +20,20 @@ class Todo extends Component {
 
     this.addItem = this.addItem.bind(this)
     this.deleteItem = this.deleteItem.bind(this)
-    this.achieveItem = this.achieveItem.bind(this)
+    this.completedItem = this.completedItem.bind(this)
     this.setUpdate = this.setUpdate.bind(this)
     this.showAllItems = this.showAllItems.bind(this)
     this.showActiveItems = this.showActiveItems.bind(this)
     this.showCompletedItems = this.showCompletedItems.bind(this)
     this.deleteCompletedItems = this.deleteCompletedItems.bind(this)
   }
+
+  componentDidMount () {
+    // 验证token
+    updateToBackEnd('token/vertify', {})
+  }
+
+
 
   addItem (e) {
     if (this._inputElement.value !== '') {
@@ -34,24 +43,14 @@ class Todo extends Component {
         completed: false,
         display: 'block'
       };
-      const storage = window.localStorage;
+
+      // 同步后端
       let todoInfo = {
-        name: storage.getItem("name"),
-        thing: newItem.text,
-        completed: newItem.completed
+        UserID: 'light',
+        TodoThing: newItem.text,
+        Completed: newItem.completed
       };
-      let token = storage.getItem('token')
-      const headers = {
-        'authorization': 'Bearer ' + token
-      }
-
-
-
-      axios.post('http://localhost:3001/todo/test', todoInfo, { headers: headers }).then((res) => {
-        console.log(res.data)
-      }).catch(() => { console.log('error') })
-
-
+      updateToBackEnd('createTodo', todoInfo)
 
       this.setState((prevState) => {
         return {
@@ -59,19 +58,24 @@ class Todo extends Component {
         };
       });
     }
-
-
-
     this._inputElement.value = "";
-
-
     e.preventDefault();
   }
 
-  achieveItem (key) {
+
+  completedItem (key) {
     const items = this.state.items;
     items.map((item) => {
       if (item.key === key) {
+
+        // 同步后端
+        let todoInfo = {
+          UserID: 'light',
+          ItemID: 'f54cd3e2-2e10-42a7-b442-74663f043eac',
+          Completed: !item.completed
+        };
+        updateToBackEnd('updateTodo', todoInfo)
+
         return item.completed = !item.completed
       }
       return null
@@ -95,6 +99,14 @@ class Todo extends Component {
     const items = this.state.items;
     items.map((item) => {
       if (item.key === key) {
+        // 同步后端
+        let todoInfo = {
+          UserID: 'light',
+          ItemID: '',
+          Completed: item.completed,
+          TodoThing: text
+        };
+        updateToBackEnd('updateTodo', todoInfo)
         return item.text = text
       }
       return null
@@ -170,7 +182,7 @@ class Todo extends Component {
           <TodoItems
             entries={this.state.items}
             delete={this.deleteItem}
-            achieve={this.achieveItem}
+            completed={this.completedItem}
             setUpdate={this.setUpdate}
           ></TodoItems>
           <Seletor

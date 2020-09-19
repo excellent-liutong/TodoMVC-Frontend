@@ -64,10 +64,12 @@ form button:focus{
   display: flex;
   justify-content: space-around;
   align-items: center; 
-  flex-direction: row;
+  flex-direction: column;
+
 }
 
 .login-container .setting{
   display: inline-block;
+  margin: 10px;
 }
 

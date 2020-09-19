@@ -6,10 +6,10 @@ class Header extends Component {
   render () {
     return (
       <header id="Header-container" >
-        <h1>todos</h1>
+        <h1><Link   className="fixLink" to="/">todos</Link></h1>
         <div id="Header-buttons">
-          <Link className="button" to="/">主页</Link>
-          <Link className="button" to="/login">登录</Link>
+          <Link className="button fixLink" to="/register">注册</Link>
+          <Link className="button fixLink" to="/login">登录</Link>
         </div>
       </header>)
   }

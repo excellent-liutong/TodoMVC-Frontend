@@ -14,18 +14,18 @@ class TodoItems extends Component {
     this.props.delete(key)
   }
 
-  achieve (key) {
-    this.props.achieve(key)
+  completed (key) {
+    this.props.completed(key)
   }
 
   createTasks (item) {
     return (
-      <div key={item.key} style={{display: item.display}}>
+      <div key={item.key} style={{ display: item.display }}>
         <div className='circle'>
           <FontAwesomeIcon
             className='faicons'
             icon={["far", item.completed ? "check-circle" : "circle"]}
-            onClick={() => { this.achieve(item.key) }} />
+            onClick={() => { this.completed(item.key) }} />
         </div>
         <li className={item.completed ? 'achieved' : ''}
         >
