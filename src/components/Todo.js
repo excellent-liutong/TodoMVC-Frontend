@@ -28,10 +28,7 @@ class Todo extends Component {
     this.deleteCompletedItems = this.deleteCompletedItems.bind(this)
   }
 
-  componentDidMount () {
-    // 验证token
-    updateToBackEnd('token/vertify', {})
-  }
+
 
 
 
@@ -166,6 +163,9 @@ class Todo extends Component {
   }
 
   render () {
+    if (this.state.user) {
+      console.log(this.state.user)
+    }
     return (
       <Fragment>
         <div className="todoListMain">

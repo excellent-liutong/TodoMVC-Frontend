@@ -1,23 +1,16 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import "../css//Login.css";
+import { updateToBackEnd } from './utils/axios'
 import axios from 'axios'
-
 class Login extends Component {
   constructor(props) {
     super(props);
-
+    this.state = {};
     this.login = this.login.bind(this)
   }
 
   login (e) {
-    const storage = window.localStorage;
-    let token = storage.getItem('token')
-    const headers = {
-      'authorization': 'Bearer ' + token
-    }
-    console.log(headers)
-
     if (this._inputUser.value !== '' && this._inputPW !== '') {
       let userInfo = {
         Name: this._inputUser.value,
@@ -26,21 +19,43 @@ class Login extends Component {
       console.log(userInfo)
 
       // 登录
-      axios.post('user/login', userInfo, { headers: headers }).then((res) => {
-        console.log(res.data)
-      }).catch(() => { console.log('登录失败') })
+      // updateToBackEnd('user/login', userInfo)
+      axios.post('user/login', userInfo).then((res) => {
+        console.log('post请求成功：', res.data)
+        localStorage.setItem("name", res.data.value)
+        localStorage.setItem("token", res.data.token)
+        this.props.setUser(res.data.userName)
+      })
+        .catch((err) => {
+          console.log('后台post请求处理失败')
+          this.setState({ message: err.response.data.message })
 
+        })
 
+      this.setState({
+        loggedIn: true
+      });
     }
 
     e.preventDefault();
   }
 
   render () {
+    if (this.state.loggedIn) {
+      return <Redirect to={'/'} />;
+    }
+
+    let error = '';
+    if (this.state.message) {
+      error = (
+        <div className="alert">{this.state.message}</div>
+      )
+    }
     return (
       <Fragment>
         <div className="login-container">
           <form className="login-form" onSubmit={this.login}>
+            {error}
             <input
               ref={(a) => { this._inputUser = a }}
               placeholder="请输入用户名">
@@ -60,14 +75,14 @@ class Login extends Component {
                 <Link to="/" className="fixLink">返回主页</Link>
               </button>
               <button type="submit">
-                登录
-            </button>
+                <Link to="/" className="fixLink">登录</Link>
+              </button>
             </div>
           </form>
 
 
           <div id="setting-container">
-            <Link to="/changePW" className="fixLink setting">忘记密码</Link>
+            <Link to="/forgotPW" className="fixLink setting">忘记密码</Link>
 
             <Link to="/register" className="fixLink setting">立即注册</Link>
 

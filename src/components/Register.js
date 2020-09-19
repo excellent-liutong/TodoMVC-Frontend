@@ -7,11 +7,12 @@ import { updateToBackEnd } from './utils/axios'
 class Register extends Component {
   constructor(props) {
     super(props);
+    this.state = {};
     this.register = this.register.bind(this)
   }
 
   register (e) {
-    const storage = window.localStorage;
+
 
     // 创建用户
     if (this._inputName.value !== '' && this._inputPW !== '') {
@@ -19,18 +20,23 @@ class Register extends Component {
         Name: this._inputName.value,
         Password: this._inputPW.value,
       };
-      storage.setItem("name", this._inputName.value)
+      localStorage.setItem("name", this._inputName.value)
 
       console.log(userInfo)
 
       // 向后端传入参数，获取token
       axios.post('token', userInfo).then((res) => {
-        storage.setItem("token", res.data.token)
+        localStorage.setItem("token", res.data.token)
         console.log('返回的token为：', res.data.token)
       }).then(() => {
         updateToBackEnd('user/register', userInfo)
       }
-      ).catch(() => { console.log('error') })
+      )
+        .catch((err) => {
+          console.log('后台post请求处理失败')
+          this.setState({ message: err.response.data.message })
+
+        })
     }
 
     e.preventDefault();
@@ -38,11 +44,19 @@ class Register extends Component {
 
 
   render () {
+    let error = '';
+    
+    if (this.state.message) {
+      error = (
+        <div className="alert">{this.state.message}</div>
+      )
+    }
     return (
       <Fragment>
         <div className="register-container">
           <form className="register-form" onSubmit={this.register}>
 
+            {error}
             <input
               ref={(a) => { this._inputName = a }}
               placeholder="请输入用户名">
@@ -63,8 +77,8 @@ class Register extends Component {
             <div className="button-container">
               <button><Link to="/" className="fixLink">返回主页</Link></button>
               <button type="submit">
-                注册
-            </button>
+                <Link to="/" className="fixLink">注册</Link>
+              </button>
             </div>
           </form>
         </div>
