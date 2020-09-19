@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Link, Redirect } from "react-router-dom";
 import "../css//Login.css";
-import { updateToBackEnd } from './utils/axios'
 import axios from 'axios'
+
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +13,7 @@ class Login extends Component {
 
   login (e) {
     if (this._inputUser.value !== '' && this._inputPW !== '') {
+      console.log('使用登录')
       let userInfo = {
         Name: this._inputUser.value,
         Password: this._inputPW.value,
@@ -19,13 +21,15 @@ class Login extends Component {
       console.log(userInfo)
 
       // 登录
-      // updateToBackEnd('user/login', userInfo)
-      axios.post('user/login', userInfo).then((res) => {
-        console.log('post请求成功：', res.data)
-        localStorage.setItem("name", res.data.value)
-        localStorage.setItem("token", res.data.token)
-        this.props.setUser(res.data.userName)
-      })
+      axios.post('user/login', userInfo)
+        .then((res) => {
+          console.log('用户登录成功')
+          console.log(res.data)
+          // localStorage.setItem("name", res.data.value)
+          localStorage.setItem("token", res.data)
+          // console.log(res.data)
+          // this.props.setUser(res.data.Name)
+        })
         .catch((err) => {
           console.log('后台post请求处理失败')
           this.setState({ message: err.response.data.message })
@@ -41,9 +45,9 @@ class Login extends Component {
   }
 
   render () {
-    if (this.state.loggedIn) {
-      return <Redirect to={'/'} />;
-    }
+    // if (this.state.loggedIn) {
+    //   return <Redirect to={'/'} />;
+    // }
 
     let error = '';
     if (this.state.message) {

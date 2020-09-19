@@ -8,30 +8,45 @@ import Register from './components/Register'
 import ForgotPW from './components/ForgotPW'
 import Logout from './components/Logout'
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
 axios.defaults.baseURL = 'http://localhost:3001/';
+// axios.defaults.baseURL = 'http://todolist.light2018.club/';
 axios.defaults.headers.common["Authorization"] = 'Bearer ' + localStorage.getItem('token')
 
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      name: ''
+    };
   }
   componentDidMount () {
     // 验证token
-    axios.post('token/vertify').then(
-      res => {
-        console.log('身份验证请求成功：', res.data)
-        this.setUser(res.data.userName)
+    // axios.post('token/vertify').then(
+    //   res => {
+    //     console.log('身份验证请求成功：', res.data)
+    //     this.setUser(res.data.userName)
+    //   },
+    //   err => {
+    //     console.log(err)
+    //   }
+    // )
+    // if (!localStorage.getItem('token')) {
+    const token = localStorage.getItem('token')
+    const decoded = jwt_decode(token)
+    console.log(decoded)
+    this.setState({
+      name: decoded.Name,
+      UserID:decoded.UserID
+    })
+    // }
 
-      },
-      err => {
-        console.log(err)
-      }
-    )
+
+
     this.setUser = user => {
       this.setState({
         user: user
@@ -41,7 +56,8 @@ class App extends Component {
   }
 
   render () {
-    console.log('用户:', this.state.user)
+    // console.log('用户:', this.state.user)
+    console.log('用户:', this.state.name)
     return (
       <div>
         <Router>

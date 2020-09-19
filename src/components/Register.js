@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { Link } from "react-router-dom";
 import "../css//Register.css";
 import axios from 'axios'
-import { updateToBackEnd } from './utils/axios'
 
 class Register extends Component {
   constructor(props) {
@@ -12,30 +11,34 @@ class Register extends Component {
   }
 
   register (e) {
-
-
     // 创建用户
     if (this._inputName.value !== '' && this._inputPW !== '') {
       let userInfo = {
         Name: this._inputName.value,
         Password: this._inputPW.value,
       };
-      localStorage.setItem("name", this._inputName.value)
+      // localStorage.setItem("Name", this._inputName.value)
 
       console.log(userInfo)
 
       // 向后端传入参数，获取token
-      axios.post('token', userInfo).then((res) => {
-        localStorage.setItem("token", res.data.token)
-        console.log('返回的token为：', res.data.token)
-      }).then(() => {
-        updateToBackEnd('user/register', userInfo)
-      }
-      )
+      // axios.post('token', userInfo).then((res) => {
+      //   localStorage.setItem("token", res.data.token)
+      //   console.log('返回的token为：', res.data.token)
+      // }).then(() => {
+      axios.post("user/register", userInfo)
+        .then((res) => {
+          console.log('用户注册成功', res.data)
+        })
         .catch((err) => {
-          console.log('后台post请求处理失败')
+          console.log('用户注册失败')
           this.setState({ message: err.response.data.message })
 
+          //   .catch(() => { console.log('后台post请求处理失败') })
+          // })
+          //   .catch ((err) => {
+          //   console.log('后台post请求处理失败')
+          //   this.setState({ message: err.response.data.message })
         })
     }
 
@@ -45,7 +48,7 @@ class Register extends Component {
 
   render () {
     let error = '';
-    
+
     if (this.state.message) {
       error = (
         <div className="alert">{this.state.message}</div>
