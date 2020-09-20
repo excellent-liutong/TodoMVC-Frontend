@@ -5,9 +5,8 @@ import "../css//TodoList.css";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { faTrash, faCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
 
-
-import { updateToBackEnd } from './utils/axios'
 
 library.add(far, faTrash, faCircle, faCheckCircle)
 
@@ -29,7 +28,54 @@ class Todo extends Component {
   }
 
 
+  getAllItem () {
+    if (this.props.user.loggedIn) {
+      let todoInfo = {
+        UserID: this.props.user.UserID,
+      };
 
+      axios.post('todo/getAllTodo', todoInfo)
+        .then((res) => {
+          console.log('获取用户所有todo')
+          console.log(res.data.status)
+          function compare (p) {
+            return (m, n) => {
+              return m[p] - n[p];
+            }
+          }
+          res.data.status.sort(compare("Order"));
+
+
+          res.data.status.map((item) => {
+            let newItem = {
+              TodoID: item.TodoID,
+              text: item.TodoThing,
+              completed: item.Completed,
+              key: Date.now(),
+              display: 'block'
+            };
+
+
+            this.setState((prevState) => {
+              return {
+                items: [...prevState.items, newItem]
+              };
+            }
+
+            );
+            return null
+          })
+          console.log(this.state.items)
+
+        })
+        .catch((err) => {
+          console.log('todo获取失败')
+        })
+    }
+
+
+
+  }
 
 
   addItem (e) {
@@ -42,12 +88,25 @@ class Todo extends Component {
       };
 
       // 同步后端
+      // const token = localStorage.getItem('token')
       let todoInfo = {
-        UserID: 'light',
+        UserID: this.props.user.UserID,
         TodoThing: newItem.text,
         Completed: newItem.completed
       };
-      updateToBackEnd('createTodo', todoInfo)
+
+      axios.post('todo/createTodo', todoInfo)
+        .then((res) => {
+          console.log('todo创建成功')
+          console.log(res.data.status)
+          newItem.TodoID = res.data.status.TodoID
+        })
+        .catch((err) => {
+          console.log('todo创建失败')
+          console.log(err.response.data.error)
+          this.setState({ message: err.response.data.error })
+        })
+
 
       this.setState((prevState) => {
         return {
@@ -64,14 +123,24 @@ class Todo extends Component {
     const items = this.state.items;
     items.map((item) => {
       if (item.key === key) {
-
         // 同步后端
         let todoInfo = {
-          UserID: 'light',
-          ItemID: 'f54cd3e2-2e10-42a7-b442-74663f043eac',
+          TodoID: item.TodoID,
+          TodoThing: item.TodoThing,
+          UserID: this.props.user.UserID,
           Completed: !item.completed
         };
-        updateToBackEnd('updateTodo', todoInfo)
+
+        axios.post('todo/updateTodo', todoInfo)
+          .then((res) => {
+            console.log('todo已成功更新')
+            console.log(res.data.status)
+          })
+          .catch((err) => {
+            console.log('todo更新失败')
+            console.log(err.response.data.error)
+            this.setState({ message: err.response.data.error })
+          })
 
         return item.completed = !item.completed
       }
@@ -84,11 +153,37 @@ class Todo extends Component {
 
 
   deleteItem (key) {
-    let filteredItems = this.state.items.filter((item) => {
+    const items = this.state.items;
+    let filteredItems = items.filter((item) => {
       return item.key !== key
     })
     this.setState({
       items: filteredItems
+    })
+    items.map((item) => {
+      if (item.key === key) {
+        // 同步后端
+        let todoInfo = {
+          TodoID: item.TodoID,
+          TodoThing: item.TodoThing,
+          UserID: this.props.user.UserID,
+          Completed: !item.completed
+        };
+
+        axios.post('todo/deleteTodo', todoInfo)
+          .then((res) => {
+            console.log('todo已成功删除')
+            console.log(res.data)
+          })
+          .catch((err) => {
+            console.log('todo删除失败')
+            console.log(err.response.data.error)
+            this.setState({ message: err.response.data.error })
+          })
+
+        return item.completed = !item.completed
+      }
+      return null
     })
   }
 
@@ -98,12 +193,23 @@ class Todo extends Component {
       if (item.key === key) {
         // 同步后端
         let todoInfo = {
-          UserID: 'light',
-          ItemID: '',
-          Completed: item.completed,
-          TodoThing: text
+          TodoID: item.TodoID,
+          TodoThing: text,
+          UserID: this.props.user.UserID,
+          Completed: !item.completed
         };
-        updateToBackEnd('updateTodo', todoInfo)
+
+        axios.post('todo/updateTodo', todoInfo)
+          .then((res) => {
+            console.log('todo已成功更新')
+            console.log(res.data.status)
+          })
+          .catch((err) => {
+            console.log('todo更新失败')
+            console.log(err.response.data.error)
+            this.setState({ message: err.response.data.error })
+          })
+
         return item.text = text
       }
       return null
@@ -154,18 +260,63 @@ class Todo extends Component {
   }
 
   deleteCompletedItems () {
-    let filteredItems = this.state.items.filter((item) => {
+    const items = this.state.items;
+    let filteredItems = items.filter((item) => {
       return item.completed === false
     })
     this.setState({
       items: filteredItems
     })
+    items.map((item) => {
+      if (item.completed === true) {
+        // 同步后端
+        let todoInfo = {
+          TodoID: item.TodoID,
+          TodoThing: item.TodoThing,
+          UserID: this.props.user.UserID,
+          Completed: !item.completed
+        };
+
+        axios.post('todo/deleteTodo', todoInfo)
+          .then((res) => {
+            console.log('todo已成功删除')
+            console.log(res.data)
+          })
+          .catch((err) => {
+            console.log('todo删除失败')
+            console.log(err.response.data.error)
+            this.setState({ message: err.response.data.error })
+          })
+
+        return item.completed = !item.completed
+      }
+      return null
+    })
+
+
+
+  }
+
+  clearUserItems () {
+    if (!this.props.user.loggedIn) {
+      console.log('clear')
+      this.setState({
+        items: []
+      })
+    }
+  }
+
+  componentDidMount () {
+
+    this.getAllItem()
+    this.clearUserItems()
   }
 
   render () {
     if (this.state.user) {
       console.log(this.state.user)
     }
+
     return (
       <Fragment>
         <div className="todoListMain">

@@ -3,41 +3,46 @@ import { Link } from "react-router-dom";
 import "../css//Login.css";
 import axios from 'axios'
 
-class ForgotPW extends Component {
+class ForgetPW extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.forgotPW = this.forgotPW.bind(this)
+    this.forgetPW = this.forgetPW.bind(this)
   }
 
-  forgotPW (e) {
-    if (this._inputUser.value !== '' && this._inputPW !== '') {
+  forgetPW (e) {
+    if (this._inputPW.value === '') {
+      this.setState({ message: '请输入新密码' })
+    }
+    else if (this._inputCheckPW.value === '') {
+      this.setState({ message: '请再次输入新密码' })
+    }
+    else if (this._inputPW.value !== this._inputCheckPW.value) {
+      this.setState({ message: '二次密码输入不一致' })
+    }
+    else {
       let userInfo = {
-        Name: this._inputUser.value,
+        Name: this.props.user.name,
         Password: this._inputPW.value,
       };
-      console.log(userInfo)
 
-      axios.post('user/changePW', userInfo).then(
+      axios.post('user/forgetPW', userInfo).then(
         res => {
-          console.log('身份验证请求成功：', res.data)
-          this.setUser(res.data.userName)
-        },
-        err => {
-          console.log(err)
+          console.log('修改密码成功：', res.data)
+          this.setState({ message: res.data.status })
         }
       ).catch((err) => {
-        console.log('后台post请求处理失败')
-        this.setState({ message: err.response.data.message })
+        console.log('修改密码失败')
+        console.log(err.response.data.error)
+        this.setState({ message: err.response.data.error })
       })
-    }
 
+    }
     e.preventDefault();
   }
 
   render () {
     let error = '';
-
     if (this.state.message) {
       error = (
         <div className="alert">{this.state.message}</div>
@@ -46,13 +51,8 @@ class ForgotPW extends Component {
     return (
       <Fragment>
         <div className="login-container">
-          <form className="login-form" onSubmit={this.forgotPW}>
+          <form className="login-form" onSubmit={this.forgetPW}>
             {error}
-            <input
-              ref={(a) => { this._inputUser = a }}
-              placeholder="请输入用户名">
-            </input>
-
             <input
               type="password"
               name="pass"
@@ -73,14 +73,13 @@ class ForgotPW extends Component {
                 <Link to="/" className="fixLink">返回主页</Link>
               </button>
               <button type="submit">
-                <Link to="/" className="fixLink">修改</Link>
+                修改密码
               </button>
             </div>
           </form>
-
         </div>
       </Fragment>)
   }
 }
 
-export default ForgotPW;
+export default ForgetPW;

@@ -73,3 +73,14 @@ form button:focus{
   margin: 10px;
 }
 
+.alert{
+  width:200px;
+  height: 30px;
+  margin-top: -15px;
+  margin-bottom: 10px;
+  background-color: #ff8c78;
+  text-align: center;
+  line-height:30px;
+  border-radius: 10px;
+}
+

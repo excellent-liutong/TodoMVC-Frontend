@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link, Redirect } from "react-router-dom";
 import "../css//Login.css";
 import axios from 'axios'
-
+import jwt_decode from 'jwt-decode'
 
 class Login extends Component {
   constructor(props) {
@@ -12,47 +12,51 @@ class Login extends Component {
   }
 
   login (e) {
-    if (this._inputUser.value !== '' && this._inputPW !== '') {
-      console.log('使用登录')
+    if (this._inputUser.value === '') {
+      this.setState({ message: '请输入用户名' })
+    }
+    else if (this._inputPW.value === '') {
+      this.setState({ message: '请输入密码' })
+    }
+    else {
       let userInfo = {
         Name: this._inputUser.value,
         Password: this._inputPW.value,
       };
-      console.log(userInfo)
 
       // 登录
       axios.post('user/login', userInfo)
         .then((res) => {
           console.log('用户登录成功')
           console.log(res.data)
-          // localStorage.setItem("name", res.data.value)
           localStorage.setItem("token", res.data)
-          // console.log(res.data)
-          // this.props.setUser(res.data.Name)
+          const decoded = jwt_decode(res.data)
+          this.props.setUser(decoded.Name)
+          this.props.setUserID(decoded.UserID)
+          this.props.setLog(true)
         })
         .catch((err) => {
-          console.log('后台post请求处理失败')
-          this.setState({ message: err.response.data.message })
-
+          console.log('用户登录失败')
+          console.log(err.response.data.error)
+          this.setState({ message: err.response.data.error })
         })
-
-      this.setState({
-        loggedIn: true
-      });
     }
 
     e.preventDefault();
   }
 
   render () {
-    // if (this.state.loggedIn) {
-    //   return <Redirect to={'/'} />;
-    // }
+    if (this.props.user.loggedIn) {
+      return <Redirect to={'/'} />;
+    }
 
     let error = '';
     if (this.state.message) {
+      console.log(this.state.message)
       error = (
-        <div className="alert">{this.state.message}</div>
+        <div className="alert">
+          {this.state.message}
+        </div>
       )
     }
     return (
@@ -79,17 +83,13 @@ class Login extends Component {
                 <Link to="/" className="fixLink">返回主页</Link>
               </button>
               <button type="submit">
-                <Link to="/" className="fixLink">登录</Link>
+                登录
+                {/* <Link to="/" className="fixLink">登录</Link> */}
               </button>
             </div>
           </form>
-
-
           <div id="setting-container">
-            <Link to="/forgotPW" className="fixLink setting">忘记密码</Link>
-
             <Link to="/register" className="fixLink setting">立即注册</Link>
-
           </div>
 
         </div>

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import "../css//Register.css";
 import axios from 'axios'
 
@@ -12,33 +12,39 @@ class Register extends Component {
 
   register (e) {
     // 创建用户
-    if (this._inputName.value !== '' && this._inputPW !== '') {
+    if (this._inputName.value === '') {
+      this.setState({ message: '请输入用户名' })
+    }
+    else if (this._inputPW.value === '') {
+      this.setState({ message: '请输入密码' })
+    }
+    else if (this._inputCheckPW.value === '') {
+      this.setState({ message: '请再次输入密码' })
+    }
+    else if (this._inputPW.value !== this._inputCheckPW.value) {
+      this.setState({ message: '二次密码输入不一致' })
+    }
+    else {
       let userInfo = {
         Name: this._inputName.value,
         Password: this._inputPW.value,
       };
-      // localStorage.setItem("Name", this._inputName.value)
 
-      console.log(userInfo)
-
-      // 向后端传入参数，获取token
-      // axios.post('token', userInfo).then((res) => {
-      //   localStorage.setItem("token", res.data.token)
-      //   console.log('返回的token为：', res.data.token)
-      // }).then(() => {
       axios.post("user/register", userInfo)
         .then((res) => {
-          console.log('用户注册成功', res.data)
+          if (!res.data.error) {
+            console.log(res.data.status)
+            this.props.setUser(res.data.status.Name)
+            this.props.setUserID(res.data.status.UserID)
+            this.props.setLog(true);
+          }
+          else {
+            this.setState({ message: res.data.error })
+          }
+
         })
         .catch((err) => {
-          console.log('用户注册失败')
-          this.setState({ message: err.response.data.message })
-
-          //   .catch(() => { console.log('后台post请求处理失败') })
-          // })
-          //   .catch ((err) => {
-          //   console.log('后台post请求处理失败')
-          //   this.setState({ message: err.response.data.message })
+          this.setState({ message: '用户注册失败' })
         })
     }
 
@@ -47,11 +53,14 @@ class Register extends Component {
 
 
   render () {
-    let error = '';
+    if (this.props.user.loggedIn) {
+      return <Redirect to={'/'} />
+    }
 
+    let error = '';
     if (this.state.message) {
       error = (
-        <div className="alert">{this.state.message}</div>
+        <div className="alert" >{this.state.message}</div>
       )
     }
     return (
@@ -80,7 +89,7 @@ class Register extends Component {
             <div className="button-container">
               <button><Link to="/" className="fixLink">返回主页</Link></button>
               <button type="submit">
-                <Link to="/" className="fixLink">注册</Link>
+                注册
               </button>
             </div>
           </form>
