@@ -33,7 +33,7 @@ class Register extends Component {
       axios.post("user/register", userInfo)
         .then((res) => {
           if (!res.data.error) {
-            console.log(res.data.status)
+            // console.log(res.data.status)
             this.props.setUser(res.data.status.Name)
             this.props.setUserID(res.data.status.UserID)
             this.props.setLog(true);

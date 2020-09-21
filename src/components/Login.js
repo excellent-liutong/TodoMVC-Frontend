@@ -27,8 +27,8 @@ class Login extends Component {
       // 登录
       axios.post('user/login', userInfo)
         .then((res) => {
-          console.log('用户登录成功')
-          console.log(res.data)
+          // console.log('用户登录成功')
+          // console.log(res.data)
           localStorage.setItem("token", res.data)
           const decoded = jwt_decode(res.data)
           this.props.setUser(decoded.Name)
@@ -36,8 +36,8 @@ class Login extends Component {
           this.props.setLog(true)
         })
         .catch((err) => {
-          console.log('用户登录失败')
-          console.log(err.response.data.error)
+          // console.log('用户登录失败')
+          // console.log(err.response.data.error)
           this.setState({ message: err.response.data.error })
         })
     }
@@ -52,7 +52,7 @@ class Login extends Component {
 
     let error = '';
     if (this.state.message) {
-      console.log(this.state.message)
+      // console.log(this.state.message)
       error = (
         <div className="alert">
           {this.state.message}

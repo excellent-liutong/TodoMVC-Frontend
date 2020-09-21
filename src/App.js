@@ -13,7 +13,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
 axios.defaults.baseURL = 'http://localhost:3001/';
-// axios.defaults.baseURL = 'http://todolist.light2018.club/';
+// axios.defaults.baseURL = '/';
 axios.defaults.headers.common["Authorization"] = 'Bearer ' + localStorage.getItem('token')
 
 
@@ -30,7 +30,7 @@ class App extends Component {
     if (localStorage.getItem('token') !== null) {
       const token = localStorage.getItem('token')
       const decoded = jwt_decode(token)
-      console.log(decoded)
+      // console.log(decoded)
       this.setState({
         name: decoded.Name,
         UserID: decoded.UserID,
@@ -57,7 +57,7 @@ class App extends Component {
   }
 
   render () {
-    console.log('用户:', this.state.name)
+    // console.log('用户:', this.state.name)
     return (
       <div>
         <Router>

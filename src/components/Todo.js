@@ -37,7 +37,7 @@ class Todo extends Component {
       axios.post('todo/getAllTodo', todoInfo)
         .then((res) => {
           console.log('获取用户所有todo')
-          console.log(res.data.status)
+          // console.log(res.data.status)
           function compare (p) {
             return (m, n) => {
               return m[p] - n[p];
@@ -65,7 +65,7 @@ class Todo extends Component {
             );
             return null
           })
-          console.log(this.state.items)
+          // console.log(this.state.items)
 
         })
         .catch((err) => {
@@ -97,14 +97,12 @@ class Todo extends Component {
 
       axios.post('todo/createTodo', todoInfo)
         .then((res) => {
-          console.log('todo创建成功')
-          console.log(res.data.status)
+          // console.log('todo创建成功')
+          // console.log(res.data.status)
           newItem.TodoID = res.data.status.TodoID
         })
         .catch((err) => {
           console.log('todo创建失败')
-          console.log(err.response.data.error)
-          this.setState({ message: err.response.data.error })
         })
 
 
@@ -134,12 +132,11 @@ class Todo extends Component {
         axios.post('todo/updateTodo', todoInfo)
           .then((res) => {
             console.log('todo已成功更新')
-            console.log(res.data.status)
+            // console.log(res.data.status)
           })
           .catch((err) => {
             console.log('todo更新失败')
-            console.log(err.response.data.error)
-            this.setState({ message: err.response.data.error })
+            // console.log(err.response.data.error)
           })
 
         return item.completed = !item.completed
@@ -173,12 +170,11 @@ class Todo extends Component {
         axios.post('todo/deleteTodo', todoInfo)
           .then((res) => {
             console.log('todo已成功删除')
-            console.log(res.data)
+            // console.log(res.data)
           })
           .catch((err) => {
             console.log('todo删除失败')
-            console.log(err.response.data.error)
-            this.setState({ message: err.response.data.error })
+            // console.log(err.response.data.error)
           })
 
         return item.completed = !item.completed
@@ -202,12 +198,11 @@ class Todo extends Component {
         axios.post('todo/updateTodo', todoInfo)
           .then((res) => {
             console.log('todo已成功更新')
-            console.log(res.data.status)
+            // console.log(res.data.status)
           })
           .catch((err) => {
             console.log('todo更新失败')
-            console.log(err.response.data.error)
-            this.setState({ message: err.response.data.error })
+            // console.log(err.response.data.error)
           })
 
         return item.text = text
@@ -280,12 +275,11 @@ class Todo extends Component {
         axios.post('todo/deleteTodo', todoInfo)
           .then((res) => {
             console.log('todo已成功删除')
-            console.log(res.data)
+            // console.log(res.data)
           })
           .catch((err) => {
             console.log('todo删除失败')
-            console.log(err.response.data.error)
-            this.setState({ message: err.response.data.error })
+            // console.log(err.response.data.error)
           })
 
         return item.completed = !item.completed
@@ -299,7 +293,7 @@ class Todo extends Component {
 
   clearUserItems () {
     if (!this.props.user.loggedIn) {
-      console.log('clear')
+      console.log('退出登录后清空')
       this.setState({
         items: []
       })
@@ -314,7 +308,7 @@ class Todo extends Component {
 
   render () {
     if (this.state.user) {
-      console.log(this.state.user)
+      // console.log(this.state.user)
     }
 
     return (

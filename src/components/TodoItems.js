@@ -20,7 +20,7 @@ class TodoItems extends Component {
 
   createTasks (item) {
     return (
-      <div key={item.key} style={{ display: item.display }}>
+      <div key={item.key} style={{ display: item.display }} className='li-container'>
         <div className='circle'>
           <FontAwesomeIcon
             className='faicons'
@@ -34,6 +34,7 @@ class TodoItems extends Component {
             id={item.key}
             value={item.text}
             style={{ textDecoration: item.completed ? 'line-through' : '' }}
+            icon={["far", "faBackspace"]}
             onChange={
               (e) => {
                 this.props.setUpdate(e.target.value, item.key)

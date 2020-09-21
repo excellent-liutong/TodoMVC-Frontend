@@ -28,12 +28,12 @@ class ForgetPW extends Component {
 
       axios.post('user/forgetPW', userInfo).then(
         res => {
-          console.log('修改密码成功：', res.data)
+          // console.log('修改密码成功：', res.data)
           this.setState({ message: res.data.status })
         }
       ).catch((err) => {
-        console.log('修改密码失败')
-        console.log(err.response.data.error)
+        // console.log('修改密码失败')
+        // console.log(err.response.data.error)
         this.setState({ message: err.response.data.error })
       })
 
@@ -59,8 +59,10 @@ class ForgetPW extends Component {
               size="20"
               maxLength="20"
               ref={(a) => { this._inputPW = a }}
-              placeholder="请输入新密码">
+              placeholder="请输入新密码"
+            >
             </input>
+
 
             <input
               type="password" name="pass" size="20" maxLength="20"

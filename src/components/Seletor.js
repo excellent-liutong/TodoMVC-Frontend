@@ -33,12 +33,14 @@ class Seletor extends Component {
 
       <Fragment >
         <div id="seletor-container">
-          <button onClick={() => { this.allItems() }}>全部事项</button>
+          <button 
+          onClick={() => { this.allItems() }}
+          >全部事项</button>
           <button onClick={() => { this.activeItems() }}>待完成</button>
           <button onClick={() => { this.completedItems() }}>已完成</button>
           <button 
           onClick={() => { this.deleteCompletedItems() }} 
-          style={{ display: flag ? 'block' : 'none' , fontSize:'12px',backgroundColor: '#f37a5a'}}
+          style={{ display: flag ? 'block' : 'none' , fontSize:'11px',backgroundColor: '#f37a5a'}}
            >删除已完成</button>
         </div>
       </Fragment>)

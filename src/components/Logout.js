@@ -10,7 +10,7 @@ class Logout extends Component {
   }
 
   logout () {
-    console.log('logout');
+    console.log('退出登录');
     this.props.setUser("");
     this.props.setLog(false);
     this.props.setUserID("")
