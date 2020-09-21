@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 class Header extends Component {
   render () {
     let logLink;
+    let showName = this.props.name.substr(0, 1)
     if (this.props.name) {
-      logLink = (<Link className="button fixLink" to="/logout">{this.props.name}</Link>)
+      logLink = (<Link className="button fixLink" to="/logout">{showName}</Link>)
     }
     else {
       logLink = (
