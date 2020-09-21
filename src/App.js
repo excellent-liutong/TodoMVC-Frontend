@@ -12,8 +12,8 @@ import jwt_decode from 'jwt-decode'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
-axios.defaults.baseURL = 'http://localhost:3001/';
-// axios.defaults.baseURL = '/';
+// axios.defaults.baseURL = 'http://localhost:3001/';
+axios.defaults.baseURL = '/';
 axios.defaults.headers.common["Authorization"] = 'Bearer ' + localStorage.getItem('token')
 
 
